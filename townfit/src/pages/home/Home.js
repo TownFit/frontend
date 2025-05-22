@@ -1,11 +1,11 @@
 import React from "react";
-import MapView from "../components/MapView";
-import SideBar from "../components/SideBar";
+import MapView from "../../components/MapView";
+import SideBarView from "../../components/SideBarView";
 
 function Home() {
   return (
     <div className="flex flex-row-reverse w-full h-screen">
-      <SideBar />
+      <SideBarView />
       <div className="flex-grow">
         <MapView />
       </div>

@@ -25,17 +25,17 @@ function MapView() {
         window.initMap = function () {
 
             const mapOptions = {
-                    center: new window.naver.maps.LatLng(37.3595704, 127.105399),
-                    zoom: 10};
+                    center: new window.naver.maps.LatLng(37.2820187, 127.0463409),
+                    zoom: 14};
             const map = new window.naver.maps.Map("map", mapOptions);
             
             // 마커 추가 예시
             const marker = new window.naver.maps.Marker({
-                position: new window.naver.maps.LatLng(37.3595704, 127.105399),
+                position: new window.naver.maps.LatLng(37.2820187, 127.0463409),
                 map: map
             });
             const infoWindow = new window.naver.maps.InfoWindow({
-                content: '<div style="width:150px;text-align:center;padding:10px;">이 동네는 몇점짜리?</div>'
+                content: '<div style=text-align:center;padding:10px;"><b>“이 학교, 학점 말고 점수는요?”</b></div>'
             });
             infoWindow.open(map, marker.getPosition());
         };

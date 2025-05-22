@@ -1,6 +1,6 @@
 import React from "react";
 
-function SideBar() {
+function SideBarView() {
     return (
         <div style={{ width: "400px", backgroundColor: "#FFFFFF" }}>
             <h2>원천동</h2>
@@ -8,4 +8,4 @@ function SideBar() {
     );
 }
 
-export default SideBar;
+export default SideBarView;
