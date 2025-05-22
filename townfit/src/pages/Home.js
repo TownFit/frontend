@@ -1,10 +1,10 @@
 import React from "react";
+import MapView from "../components/\bMapView";
 
 function Home() {
   return (
     <div>
-      <h1>Welcome to TownFit</h1>
-      <p>Your fitness journey starts here!</p>
+      <MapView />
     </div>
   );
 }
