@@ -1,12 +1,16 @@
 import logo from './logo.svg';
-import './App.css';
 import React from 'react';
-import Home from './pages/home/Home';
+import './App.css';
+import MapView from './view/MapView';
+import SidebarView from './view/SidebarView';
 
 function App() {
   return (
-    <div className="App">
-      <Home />
+    <div className="flex flex-row-reverse w-full h-screen">
+      <SidebarView />
+      <div className="flex-grow">
+        <MapView />
+      </div>
     </div>
   );
 }
