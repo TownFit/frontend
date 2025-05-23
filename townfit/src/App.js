@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-import React from 'react';
 import './App.css';
 import MapView from './view/MapView';
 import SidebarView from './view/SidebarView';

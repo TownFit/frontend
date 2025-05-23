@@ -5,7 +5,7 @@ import Button from "../common/Button";
 
 function HomeSidebar() {
   return (
-    <div className="flex flex-col items-center justify-between" style={{ width: "400px", height: "100%", backgroundColor: "#FFFFFF" }}>
+    <div className="flex flex-col items-center justify-between w-[450px] h-full bg-white py-20">
                 <Title />
                 <div className="">
                     <InfoBox
@@ -37,7 +37,7 @@ function HomeSidebar() {
                         }
                     />
                 </div>
-                <Button />
+                <Button content="바로 시작하기" />
             </div>
   );
 }
