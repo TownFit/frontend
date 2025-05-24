@@ -5,7 +5,7 @@ import Button from "../common/Button";
 
 function HomeSidebar() {
   return (
-    <div className="flex flex-col items-center justify-between w-[450px] h-full bg-white py-20">
+    <div className="flex flex-col items-center justify-between w-[450px] h-full bg-white">
                 <Title />
                 <div className="">
                     <InfoBox

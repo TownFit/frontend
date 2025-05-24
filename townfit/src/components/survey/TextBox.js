@@ -1,7 +1,7 @@
 function TextBox({ text, setText }) {
     return (
-        <div className="flex flex-col gap-2">
-            <label className="font-semibold text-gray-700">추가로 원하는 점이 있나요?</label>
+        <div className="flex flex-col gap-2 w-full px-20">
+            <label className="font-semibold text-gray-700 text-center">추가로 원하는 점이 있나요?</label>
             <textarea
                 className="border border-blue-500 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 rows={3}

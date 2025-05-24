@@ -17,8 +17,8 @@ function SurveySidebar() {
     };
 
     return (
-        <div className="w-full max-w-xs bg-white flex flex-col gap-20 text-center justify-center">
-            <SubTitle />
+        <div className="h-full bg-white flex flex-col gap-20 items-center justify-between">
+            <SubTitle content="FIT팅 중 . . ."/>
 
             <SelectBox
                 options={options}
@@ -28,7 +28,7 @@ function SurveySidebar() {
 
             <TextBox text={text} setText={setText} />
 
-            <Button content="제출하기" />
+            <Button content="설문 제출하기" />
         </div>
     );
 }
