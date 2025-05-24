@@ -3,12 +3,18 @@ import SubTitle from "../common/SubTitle";
 import TextBox from "./TextBox";
 import SelectBox from "./SelectBox";
 import { useState } from "react";
+import pageState from "../../stores/states";
 
 function SurveySidebar() {
 
     const [selected, setSelected] = useState([]);
     const [text, setText] = useState("");
     const options = ["반려동물", "아이", "학생", "노인"];
+    const { goToSuggestion } = pageState();
+
+    const handleGoToSuggestion = () => {
+        goToSuggestion();
+    };
 
     const handleSelect = (opt) => {
         setSelected(prev =>
@@ -28,7 +34,7 @@ function SurveySidebar() {
 
             <TextBox text={text} setText={setText} />
 
-            <Button content="설문 제출하기" />
+            <Button content="설문 제출하기" onClick={handleGoToSuggestion}/>
         </div>
     );
 }

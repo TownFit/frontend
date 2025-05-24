@@ -2,8 +2,14 @@ import React from "react";
 import Title from "./Title";
 import InfoBox from "./InfoBox";
 import Button from "../common/Button";
+import pageState from "../../stores/states";
 
 function HomeSidebar() {
+    const { goToSurvey } = pageState();
+    const handleGoToSurvey = () => {
+        goToSurvey();
+    };
+
   return (
     <div className="flex flex-col items-center justify-between w-[450px] h-full bg-white">
                 <Title />
@@ -37,7 +43,7 @@ function HomeSidebar() {
                         }
                     />
                 </div>
-                <Button content="바로 시작하기" />
+                <Button content="바로 시작하기" onClick={handleGoToSurvey}/>
             </div>
   );
 }
