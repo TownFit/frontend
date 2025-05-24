@@ -42,7 +42,16 @@ function MapView() {
     }, []);
 
     return (
-        <div id="map" style={{ width: "100%", height: "100vh" }}></div>
+        <div className="relative w-full h-full">
+            {/* 지도 */}
+            <div id="map" className="w-full h-full" />
+            {/* 왼쪽 하단에서 우측 상단으로 투명해지는 파란색 그라데이션 오버레이 */}
+            <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-tr from-blue-500/60 via-blue-400/20 to-transparent" />
+            {/* 왼쪽 하단 텍스트 */}
+            <div className="absolute left-12 bottom-12 z-20 text-white text-8xl font-bold drop-shadow-lg select-none">
+                이 동네의 점수는?
+            </div>
+        </div>
     );
 }
 
