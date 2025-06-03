@@ -5,26 +5,17 @@ import pageState from "../stores/states";
 
 function SidebarView() {
     const { page } = pageState();
-
-    if (page === "home") {
-        return (
-            <div className="flex flex-col justify-center py-20 w-[450px] h-full">
-                <HomeSidebar />
-            </div>
-        );
-    } else if (page === "survey") {
-        return (
-            <div className="flex flex-col justify-center py-20 w-[450px] h-full">
-                <SurveySidebar />
-            </div>
-        );
-    } else if (page === "suggestion") {
-        return (
-            <div className="flex flex-col justify-center py-20 w-[450px] h-full">
-                <SuggestionSidebar />
-            </div>
-        );
+    const pages = {
+        home: <HomeSidebar />,
+        survey: <SurveySidebar />,
+        suggestion: <SuggestionSidebar />,
     }
+
+    return (
+        <div className="flex flex-col justify-center py-20 w-[450px] h-full">
+            {pages[page]}
+        </div>
+    )
 }
 
 export default SidebarView;
