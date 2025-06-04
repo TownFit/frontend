@@ -4,16 +4,27 @@ import TextBox from "./TextBox";
 import SelectBox from "./SelectBox";
 import { useState } from "react";
 import pageState from "../../stores/states";
+import axios from "axios";
 
 function SurveySidebar() {
-
     const [selected, setSelected] = useState([]);
     const [text, setText] = useState("");
     const options = ["반려동물", "아이", "학생", "노인"];
     const { goToSuggestion } = pageState();
 
-    const handleGoToSuggestion = () => {
-        goToSuggestion();
+    const handleGoToSuggestion = async () => {
+        try {
+            // 1. API로 데이터 전송
+            await axios.post("https://mytownfit.com/survey/submit", {
+                selected,
+                text
+            });
+            // 2. 성공 시 페이지 이동 등 추가 동작
+            goToSuggestion();
+        } catch (error) {
+            alert("설문 제출에 실패했습니다.");
+            // 필요시 에러 처리
+        }
     };
 
     const handleSelect = (opt) => {

@@ -1,7 +1,6 @@
 function SelectField({opt, selected, handleSelect}) {
     return (
         <button
-            key={opt}
             type="button"
             className={`rounded-xl px-4 py-3 border-2 transition-all
                 ${selected.includes(opt)
