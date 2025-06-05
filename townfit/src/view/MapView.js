@@ -1,8 +1,19 @@
 import React, { useEffect } from "react";
-import pageState from "../stores/states";
+import pageState from "../stores/pageState";
+import locationState from "../stores/locationState";
 
 function MapView() {
     const { page } = pageState();
+    const { location, setLocation } = locationState();
+
+    // 컴포넌트가 마운트될 때 한 번만 location 상태를 설정
+    useEffect(() => {
+        setLocation([
+            { name: "원천동", lat: 37.2720187, lng: 127.0362309 },
+            { name: "원천동2", lat: 37.2590187, lng: 127.0792309 },
+        ]);
+    }, [setLocation]); // setLocation은 일반적으로 안정적이므로 의존성 배열에 넣어도 무방합니다.
+                       // 또는 빈 배열 []로 두어 마운트 시에만 실행되도록 할 수 있습니다.
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -16,7 +27,7 @@ function MapView() {
         window.navermap_authFailure = function () {
             alert("네이버 지도 인증에 실패했습니다. API 키를 확인하세요.");
         };
-
+ 
         // cleanup: remove script when component unmounts
         return () => {
             document.body.removeChild(script);
@@ -43,51 +54,33 @@ function MapView() {
             });
             infoWindow.open(map, marker.getPosition());
 
-            const circle_LatLng1 = new window.naver.maps.LatLng(37.2720187, 127.0362309);
-            const circle_LatLng2 = new window.naver.maps.LatLng(37.2590187, 127.0792309);
+            // location 상태가 초기화된 후에 이 코드가 실행되도록 하거나,
+            // location이 비어있을 경우를 대비한 방어 코드가 필요합니다.
+            if (location && location.length >= 2) {
+                const circle_LatLng1 = new window.naver.maps.LatLng(location[0].lat, location[0].lng);
+                const circle_LatLng2 = new window.naver.maps.LatLng(location[1].lat, location[1].lng);
 
-            // 원 그리기
-            new window.naver.maps.Circle({
-                map: map,
-                center: circle_LatLng1,
-                radius: 1000,
-                strokeWeight: 0,
-                fillColor: 'red',
-                fillOpacity: 0.2
-            });
+                // 원 그리기
+                new window.naver.maps.Circle({
+                    map: map,
+                    center: circle_LatLng1,
+                    radius: 1000,
+                    strokeWeight: 0,
+                    fillColor: 'red',
+                    fillOpacity: 0.2
+                });
 
-            new window.naver.maps.Circle({
-                map: map,
-                center: circle_LatLng2,
-                radius: 700,
-                strokeWeight: 0,
-                fillColor: 'grey',
-                fillOpacity: 0.2
-            });
+                new window.naver.maps.Circle({
+                    map: map,
+                    center: circle_LatLng2,
+                    radius: 700,
+                    strokeWeight: 0,
+                    fillColor: 'grey',
+                    fillOpacity: 0.2
+                });
+            }
         };
-    }, []);
-
-    // useEffect(() => {
-    //     // 지도 초기화
-    //     const GREEN_FACTORY = new window.naver.maps.LatLng(37.2820187, 127.0463409);
-
-    //     const map = new window.naver.maps.Map('map', {
-    //         center: GREEN_FACTORY,
-    //         zoom: 14
-    //     });
-
-    //     // 원 그리기
-    //     new window.naver.maps.Circle({
-    //         map: map,
-    //         center: GREEN_FACTORY,
-    //         radius: 500,
-    //         strokeColor: '#5347AA',
-    //         strokeOpacity: 0.5,
-    //         strokeWeight: 2,
-    //         fillColor: '#E51D1A',
-    //         fillOpacity: 0.3
-    //     });
-    // }, []);
+    }, [location]); // location이 변경될 때 initMap을 다시 정의하거나, 지도 내용을 업데이트해야 한다면 추가
 
     if (page === "home") {
         return (

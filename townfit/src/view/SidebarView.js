@@ -1,7 +1,7 @@
 import HomeSidebar from "../components/home/HomeSidebar"; // HomeSidebar 컴포넌트를 import합니다.
 import SurveySidebar from "../components/survey/SurveySidebar";
 import SuggestionSidebar from "../components/suggestion/SuggestionSidebar";
-import pageState from "../stores/states";
+import pageState from "../stores/pageState";
 
 function SidebarView() {
     const { page } = pageState();

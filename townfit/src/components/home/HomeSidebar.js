@@ -2,7 +2,7 @@ import {useState, useEffect } from "react";
 import Title from "./Title";
 import InfoBox from "./InfoBox";
 import Button from "../common/Button";
-import pageState from "../../stores/states";
+import pageState from "../../stores/pageState";
 
 
 function HomeSidebar() {
@@ -10,10 +10,25 @@ function HomeSidebar() {
 
     useEffect(() => {
         if (window.opener) { // 팝업 화면에서
-            window.opener.postMessage({ type: "authSuccess" }, "*");
+            const popupUrl = window.location.href; // 팝업의 현재 URL을 가져옵니다.
+            // 예시: 콘솔에 출력
+            console.log("팝업 URL:", popupUrl);
+
+            // 필요하다면 부모 창으로 URL도 함께 전달
+            // window.opener.postMessage({ type: "authSuccess", url: popupUrl }, "*");
+
             window.close();
         } else { // 메인 화면에서
-            const handler = (e) => { if(e.data && e.data.type === "authSuccess") goToSurvey(); };
+            const handler = (e) => {
+                if (e.data && e.data.type === "authSuccess") {
+                    if (e.data.token) {
+                        console.log("메인 창에서 수신한 토큰:", e.data.token);
+                        // 여기서 토큰을 저장하거나 사용할 수 있습니다.
+                        // 예: localStorage.setItem('authToken', e.data.token);
+                    }
+                    goToSurvey();
+                }
+            };
             window.addEventListener("message", handler);
             return () => window.removeEventListener("message", handler);
         }
@@ -26,6 +41,7 @@ function HomeSidebar() {
             "_blank",
             "width=500,height=700"
         );
+        // http://localhost:3000/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJuYW1lIjoiXHVjZDVjXHVkM2M5XHVkNjU0Iiwib2F1dGhfcHJvdmlkZXIiOiJnb29nbGUiLCJleHAiOjE3NDkxODIwNTN9.9zRTnwmcj7Sr-2vJW0TFsmdxmEgTOimrl0bSlmQU8CY#
     };
 
     return (

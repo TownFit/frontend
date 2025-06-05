@@ -1,13 +1,20 @@
 import SubTitle from "../common/SubTitle";
 import DescriptionBox from "./DescriptionBox";
 import Button from "../common/Button";
-import pageState from "../../stores/states";
+import pageState from "../../stores/pageState";
+import locationState from "../../stores/locationState";
 
 function SuggestionSidebar() {
 
-    const { goToHome } = pageState();
+    const { goToSurvey } = pageState();
+    const { location } = locationState();
     const handleGoToHome = () => {
-        goToHome();
+        const lat = location[0].lat;
+        const lng = location[0].lng;
+        const zoomLevel = 13;
+        const aValue = "IA01";
+
+        window.open(`https://isale.land.naver.com/iSale/Map/#?SYMap=${lat},${lng},${zoomLevel}&a=${aValue}`, "_blank");
     };
 
     return (
