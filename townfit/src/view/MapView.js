@@ -42,8 +42,52 @@ function MapView() {
                 content: '<div style=text-align:center;padding:10px;"><b>“이 학교, 학점 말고 점수는요?”</b></div>'
             });
             infoWindow.open(map, marker.getPosition());
+
+            const circle_LatLng1 = new window.naver.maps.LatLng(37.2720187, 127.0362309);
+            const circle_LatLng2 = new window.naver.maps.LatLng(37.2590187, 127.0792309);
+
+            // 원 그리기
+            new window.naver.maps.Circle({
+                map: map,
+                center: circle_LatLng1,
+                radius: 1000,
+                strokeWeight: 0,
+                fillColor: 'red',
+                fillOpacity: 0.2
+            });
+
+            new window.naver.maps.Circle({
+                map: map,
+                center: circle_LatLng2,
+                radius: 700,
+                strokeWeight: 0,
+                fillColor: 'grey',
+                fillOpacity: 0.2
+            });
         };
     }, []);
+
+    // useEffect(() => {
+    //     // 지도 초기화
+    //     const GREEN_FACTORY = new window.naver.maps.LatLng(37.2820187, 127.0463409);
+
+    //     const map = new window.naver.maps.Map('map', {
+    //         center: GREEN_FACTORY,
+    //         zoom: 14
+    //     });
+
+    //     // 원 그리기
+    //     new window.naver.maps.Circle({
+    //         map: map,
+    //         center: GREEN_FACTORY,
+    //         radius: 500,
+    //         strokeColor: '#5347AA',
+    //         strokeOpacity: 0.5,
+    //         strokeWeight: 2,
+    //         fillColor: '#E51D1A',
+    //         fillOpacity: 0.3
+    //     });
+    // }, []);
 
     if (page === "home") {
         return (

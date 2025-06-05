@@ -13,29 +13,29 @@ function SurveySidebar() {
     const { goToSuggestion } = pageState();
 
     // 1. 마운트 시 GET API 호출
-    useEffect(() => {
-        async function checkSurvey() {
-            try {
-                const res = await axios.get("https://mytownfit.com/survey/has-history");
-                if (res.data === true || res.data.has_history === true) {
-                    goToSuggestion();
-                } else {
-                    alert("history가 없습니다.")
-                }
-            } catch (error) {
-                alert("설문 조회에 실패했습니다.");
-            }
-        }
-        checkSurvey();
-    }, []);
+    // useEffect(() => {
+    //     async function checkSurvey() {
+    //         try {
+    //             const res = await axios.get("https://mytownfit.com/survey/has-history");
+    //             if (res.data === true || res.data.has_history === true) {
+    //                 goToSuggestion();
+    //             } else {
+    //                 alert("history가 없습니다.")
+    //             }
+    //         } catch (error) {
+    //             alert("설문 조회에 실패했습니다.");
+    //         }
+    //     }
+    //     checkSurvey();
+    // }, []);
 
     const handleGoToSuggestion = async () => {
         try {
-            // 1. API로 데이터 전송
-            await axios.post("https://mytownfit.com/survey/submit", {
-                selected,
-                text
-            });
+            // // 1. API로 데이터 전송
+            // await axios.post("https://mytownfit.com/survey/submit", {
+            //     selected,
+            //     text
+            // });
             // 2. 성공 시 페이지 이동 등 추가 동작
             goToSuggestion();
         } catch (error) {
