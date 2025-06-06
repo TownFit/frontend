@@ -12,13 +12,18 @@ function SurveySidebar() {
     const options = ["반려동물", "아이", "학생", "노인"];
     const { goToSuggestion } = pageState();
 
-    // 1. 마운트 시 GET API 호출
+    // JWT 토큰을 localStorage에서 가져옴
+    const token = localStorage.getItem("token");
+
+    // 1. 마운트 시 GET API 호출 (JWT 인증 헤더 추가)
     useEffect(() => {
         async function checkSurvey() {
             try {
-                const res = await axios.get("https://mytownfit.com/survey/has-history");
+                const res = await axios.get("https://mytownfit.com/survey/has-history", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 if (res.data === true || res.data.has_history === true) {
-                    goToSuggestion();
+                    // goToSuggestion();
                 } else {
                     alert("history가 없습니다.")
                 }
@@ -26,21 +31,32 @@ function SurveySidebar() {
                 alert("설문 조회에 실패했습니다.");
             }
         }
-        checkSurvey();
-    }, []);
+        if (token) {
+            checkSurvey();
+        } else {
+            alert("로그인이 필요합니다.");
+        }
+    }, [token, goToSuggestion]);
 
     const handleGoToSuggestion = async () => {
         try {
-            // 1. API로 데이터 전송
-            await axios.post("https://mytownfit.com/survey/submit", {
-                selected,
-                text
+            // selected 배열을 API 요구사항에 맞게 변환
+            const data = {
+                has_pet: selected.includes("반려동물"),
+                has_child: selected.includes("아이"),
+                has_student: selected.includes("학생"),
+                has_elderly: selected.includes("노인"),
+                notes: text
+            };
+
+            console.log("전송 데이터:", data);
+
+            await axios.post("https://mytownfit.com/survey/submit", data, {
+                headers: { Authorization: `Bearer ${token}` }
             });
-            // 2. 성공 시 페이지 이동 등 추가 동작
             goToSuggestion();
         } catch (error) {
             alert("설문 제출에 실패했습니다.");
-            // 필요시 에러 처리
         }
     };
 

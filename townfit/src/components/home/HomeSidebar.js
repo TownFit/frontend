@@ -16,8 +16,7 @@ function HomeSidebar() {
             const popupUrl = window.location.href; // 팝업의 현재 URL을 가져옵니다.
             const token = urlObj.searchParams.get("token");
             localStorage.setItem("token", token);
-
-            // 필요하다면 부모 창으로 URL도 함께 전달
+            
             window.opener.postMessage({ type: "authSuccess" }, "*");
 
             window.close();
