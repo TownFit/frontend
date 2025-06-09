@@ -6,15 +6,6 @@ function MapView() {
     const { page } = pageState();
     const { location, setLocation } = locationState();
 
-    // 컴포넌트가 마운트될 때 한 번만 location 상태를 설정
-    useEffect(() => {
-        setLocation([
-            { name: "원천동", lat: 37.2720187, lng: 127.0362309 },
-            { name: "원천동2", lat: 37.2590187, lng: 127.0792309 },
-        ]);
-    }, [setLocation]); // setLocation은 일반적으로 안정적이므로 의존성 배열에 넣어도 무방합니다.
-                       // 또는 빈 배열 []로 두어 마운트 시에만 실행되도록 할 수 있습니다.
-
     useEffect(() => {
         const script = document.createElement("script");
         script.type = "text/javascript";
@@ -32,7 +23,7 @@ function MapView() {
         return () => {
             document.body.removeChild(script);
         };
-    }, []);
+    }, [location]);
 
     // 네이버 지도 콜백 함수 정의 (window에 등록)
     useEffect(() => {
@@ -56,9 +47,8 @@ function MapView() {
 
             // location 상태가 초기화된 후에 이 코드가 실행되도록 하거나,
             // location이 비어있을 경우를 대비한 방어 코드가 필요합니다.
-            if (location && location.length >= 2) {
+            if (location && location.length >= 1) {
                 const circle_LatLng1 = new window.naver.maps.LatLng(location[0].lat, location[0].lng);
-                const circle_LatLng2 = new window.naver.maps.LatLng(location[1].lat, location[1].lng);
 
                 // 원 그리기
                 new window.naver.maps.Circle({
@@ -69,18 +59,9 @@ function MapView() {
                     fillColor: 'red',
                     fillOpacity: 0.2
                 });
-
-                new window.naver.maps.Circle({
-                    map: map,
-                    center: circle_LatLng2,
-                    radius: 700,
-                    strokeWeight: 0,
-                    fillColor: 'grey',
-                    fillOpacity: 0.2
-                });
             }
         };
-    }, [location]); // location이 변경될 때 initMap을 다시 정의하거나, 지도 내용을 업데이트해야 한다면 추가
+    }, [location, setLocation]); // location이 변경될 때 initMap을 다시 정의하거나, 지도 내용을 업데이트해야 한다면 추가
 
     if (page === "home") {
         return (
