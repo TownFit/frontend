@@ -12,13 +12,7 @@ function DescriptionBox({ recommendations }) {
                     key={rec.id || idx}
                     title={`${idx + 1}. ${rec.facility_type?.name || "추천"}`}
                     description={
-                        <>
-                            {rec.description}
-                            <br />
-                            <span style={{ color: "#888", fontSize: "0.9em" }}>
-                                {rec.facility_type?.description}
-                            </span>
-                        </>
+                       rec.facility_type?.description
                     }
                 />
             ))}

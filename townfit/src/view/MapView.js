@@ -1,67 +1,87 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import pageState from "../stores/pageState";
 import locationState from "../stores/locationState";
 
 function MapView() {
     const { page } = pageState();
-    const { location, setLocation } = locationState();
+    const { location, locationIndex, setLocationIndex } = locationState();
+    const mapRef = useRef(null);
+    const circlesRef = useRef([]);
 
+    // 지도 최초 1회만 생성
     useEffect(() => {
         const script = document.createElement("script");
         script.type = "text/javascript";
         script.src =
-            "https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=mrmfym9y53&callback=initMap";
+            "https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=mrmfym9y53";
         script.async = true;
         document.body.appendChild(script);
 
-        // 인증 실패 콜백 등록
         window.navermap_authFailure = function () {
             alert("네이버 지도 인증에 실패했습니다. API 키를 확인하세요.");
         };
- 
-        // cleanup: remove script when component unmounts
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, [location]);
 
-    // 네이버 지도 콜백 함수 정의 (window에 등록)
-    useEffect(() => {
-        window.initMap = function () {
-
-            const mapOptions = {
+        script.onload = () => {
+            mapRef.current = new window.naver.maps.Map("map", {
                 center: new window.naver.maps.LatLng(37.2820187, 127.0463409),
                 zoom: 14
-            };
-            const map = new window.naver.maps.Map("map", mapOptions);
+            });
 
-            // 마커 추가 예시
             const marker = new window.naver.maps.Marker({
                 position: new window.naver.maps.LatLng(37.2820187, 127.0463409),
-                map: map
+                map: mapRef.current
             });
             const infoWindow = new window.naver.maps.InfoWindow({
                 content: '<div style=text-align:center;padding:10px;"><b>“이 학교, 학점 말고 점수는요?”</b></div>'
             });
-            infoWindow.open(map, marker.getPosition());
-
-            // location 상태가 초기화된 후에 이 코드가 실행되도록 하거나,
-            // location이 비어있을 경우를 대비한 방어 코드가 필요합니다.
-            if (location && location.length >= 1) {
-                const circle_LatLng1 = new window.naver.maps.LatLng(location[0].lat, location[0].lng);
-
-                // 원 그리기
-                new window.naver.maps.Circle({
-                    map: map,
-                    center: circle_LatLng1,
-                    radius: 1000,
-                    strokeWeight: 0,
-                    fillColor: 'red',
-                    fillOpacity: 0.2
-                });
-            }
+            infoWindow.open(mapRef.current, marker.getPosition());
         };
-    }, [location, setLocation]); // location이 변경될 때 initMap을 다시 정의하거나, 지도 내용을 업데이트해야 한다면 추가
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
+    // location이 바뀔 때마다 원만 갱신
+    useEffect(() => {
+        if (!window.naver || !window.naver.maps || !mapRef.current) return;
+
+        // 기존 원 삭제
+        circlesRef.current.forEach(circle => circle.setMap(null));
+        circlesRef.current = [];
+
+        // location이 배열이 아니면 배열로 변환
+        const locations = Array.isArray(location) ? location : location ? [location] : [];
+
+        locations.forEach((loc, idx) => {
+            if (loc && typeof loc.lat === "number" && typeof loc.lng === "number") {
+                const isSelected = idx === locationIndex;
+                const circle = new window.naver.maps.Circle({
+                    map: mapRef.current,
+                    center: new window.naver.maps.LatLng(loc.lat, loc.lng),
+                    radius: 1000,
+                    strokeWeight: 2,
+                    strokeColor: isSelected ? '#ff0000' : '#888888', // 선택: 빨강, 비선택: 회색
+                    fillColor: isSelected ? 'red' : '#cccccc',       // 선택: 빨강, 비선택: 연회색
+                    fillOpacity: 0.4,
+                    clickable: true,
+                    zIndex: 10
+                });
+                // 클릭 이벤트 등록
+                window.naver.maps.Event.addListener(circle, "click", () => {
+                    setLocationIndex(idx);
+                });
+                circlesRef.current.push(circle);
+            }
+        });
+
+        // location이 있으면 지도 중심 이동
+        if (locations.length > 0) {
+            mapRef.current.setCenter(
+                new window.naver.maps.LatLng(locations[0].lat, locations[0].lng)
+            );
+        }
+    }, [location, setLocationIndex, locationIndex]);
 
     if (page === "home") {
         return (
