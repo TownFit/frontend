@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import pageState from "../stores/pageState";
 import locationState from "../stores/locationState";
 
@@ -7,6 +7,7 @@ function MapView() {
     const { location, locationIndex, setLocationIndex } = locationState();
     const mapRef = useRef(null);
     const circlesRef = useRef([]);
+    const [zoom, setZoom] = useState(14); // zoom 상태 추가
 
     // 지도 최초 1회만 생성
     useEffect(() => {
@@ -42,6 +43,13 @@ function MapView() {
         };
     }, []);
 
+    // 지도 줌 상태와 동기화
+    useEffect(() => {
+        if (mapRef.current) {
+            mapRef.current.setZoom(zoom);
+        }
+    }, [zoom]);
+
     // location이 바뀔 때마다 원만 갱신
     useEffect(() => {
         if (!window.naver || !window.naver.maps || !mapRef.current) return;
@@ -76,7 +84,7 @@ function MapView() {
             }
         });
 
-    }, [location, setLocationIndex, locationIndex, locationIndex]);
+    }, [location, setLocationIndex, locationIndex]);
 
     // locationIndex가 변경될 때마다 지도 중심 이동 (debounce 적용)
     useEffect(() => {
@@ -103,11 +111,45 @@ function MapView() {
         }
     }, [locationIndex, location, mapRef]);
 
+    // 지도에서 zoom 변경 시 슬라이더와 동기화
+    useEffect(() => {
+        if (!mapRef.current) return;
+        const listener = window.naver.maps.Event.addListener(mapRef.current, "zoom_changed", () => {
+            setZoom(mapRef.current.getZoom());
+        });
+        return () => {
+            window.naver.maps.Event.removeListener(listener);
+        };
+    }, []);
+
+    // 슬라이더 핸들러
+    const handleZoomChange = (e) => {
+        setZoom(Number(e.target.value));
+    };
+
+    // --- UI ---
+    const slider =
+        <div className="absolute right-6 bottom-6 z-30 flex flex-col items-center bg-white/80 rounded-lg px-4 py-3 shadow-lg">
+            <label className="text-xs text-gray-500 mb-1">지도 확대/축소</label>
+            <input
+                type="range"
+                min={7}
+                max={20}
+                step={0.1} // 실수 단위로 변경
+                value={zoom}
+                onChange={handleZoomChange}
+                className="w-32 accent-blue-500"
+            />
+            <span className="text-xs mt-1 text-blue-700 font-semibold">{zoom.toFixed(1)}</span>
+        </div>;
+
     if (page === "home") {
         return (
             <div className="relative w-full h-full border-r-2 border-blue-400">
                 {/* 지도 */}
                 <div id="map" className="w-full h-full" />
+                {/* 우측 하단 슬라이더 */}
+                {slider}
                 {/* 왼쪽 하단에서 우측 상단으로 투명해지는 파란색 그라데이션 오버레이 */}
                 <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-tr from-blue-500/60 via-blue-400/20 to-transparent" />
                 {/* 왼쪽 하단 텍스트 */}
@@ -119,13 +161,11 @@ function MapView() {
     } else {
         return (
             <div className="relative w-full h-full border-r-2 border-blue-400">
-                {/* 지도 */}
                 <div id="map" className="w-full h-full" />
+                {slider}
             </div>
         );
     }
-
-
 }
 
 export default MapView;
