@@ -34,6 +34,7 @@ function SuggestionSidebar() {
                         name: area.name,
                         lat: area.centroid.latitude,
                         lng: area.centroid.longitude,
+                        range: area.range,
                         score: area.score,
                     }))
                 );

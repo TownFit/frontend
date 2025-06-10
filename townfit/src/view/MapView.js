@@ -59,7 +59,7 @@ function MapView() {
                 const circle = new window.naver.maps.Circle({
                     map: mapRef.current,
                     center: new window.naver.maps.LatLng(loc.lat, loc.lng),
-                    radius: 1000,
+                    radius: loc.range,
                     strokeWeight: 2,
                     strokeColor: isSelected ? '#ff0000' : '#888888', // 선택: 빨강, 비선택: 회색
                     fillColor: isSelected ? 'red' : '#cccccc',       // 선택: 빨강, 비선택: 연회색
@@ -67,6 +67,7 @@ function MapView() {
                     clickable: true,
                     zIndex: 10
                 });
+                console.log(`Circle created for location ${idx}:`, loc);
                 // 클릭 이벤트 등록
                 window.naver.maps.Event.addListener(circle, "click", () => {
                     setLocationIndex(idx);
