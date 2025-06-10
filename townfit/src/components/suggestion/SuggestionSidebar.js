@@ -48,11 +48,11 @@ function SuggestionSidebar() {
         }
     }, [token]);
 
-    const handleGoToHome = () => {
+    const handleGoToNaveriSaleLand = () => {
         if (!areas[locationIndex]) return;
         const lat = areas[locationIndex].centroid.latitude;
         const lng = areas[locationIndex].centroid.longitude;
-        const zoomLevel = 13;
+        const zoomLevel = 14;
         const aValue = "IA01";
         window.open(
             `https://isale.land.naver.com/iSale/Map/#?SYMap=${lat},${lng},${zoomLevel}&a=${aValue}`,
@@ -78,7 +78,7 @@ function SuggestionSidebar() {
 
             <Button
                 content="이 동네 부동산 보기! 👀"
-                onClick={handleGoToHome}
+                onClick={handleGoToNaveriSaleLand}
             />
             <MiniButton
                 content="설문 다시하기"
