@@ -81,7 +81,26 @@ function MapView() {
                 new window.naver.maps.LatLng(locations[0].lat, locations[0].lng)
             );
         }
-    }, [location, setLocationIndex, locationIndex]);
+    }, [location, setLocationIndex, locationIndex, locationIndex]);
+
+    // locationIndex가 변경될 때마다 지도 중심 이동
+    useEffect(() => {
+        if (
+            !window.naver ||
+            !window.naver.maps ||
+            !mapRef.current ||
+            !location ||
+            !Array.isArray(location) ||
+            location.length === 0
+        ) return;
+
+        const target = location[locationIndex];
+        if (target && typeof target.lat === "number" && typeof target.lng === "number") {
+            mapRef.current.panTo(
+                new window.naver.maps.LatLng(target.lat, target.lng)
+            );
+        }
+    }, [locationIndex, location, mapRef]);
 
     if (page === "home") {
         return (
