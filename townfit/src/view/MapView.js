@@ -75,15 +75,9 @@ function MapView() {
             }
         });
 
-        // location이 있으면 지도 중심 이동
-        if (locations.length > 0) {
-            mapRef.current.setCenter(
-                new window.naver.maps.LatLng(locations[0].lat, locations[0].lng)
-            );
-        }
     }, [location, setLocationIndex, locationIndex, locationIndex]);
 
-    // locationIndex가 변경될 때마다 지도 중심 이동
+    // locationIndex가 변경될 때마다 지도 중심 이동 (debounce 적용)
     useEffect(() => {
         if (
             !window.naver ||
@@ -96,9 +90,15 @@ function MapView() {
 
         const target = location[locationIndex];
         if (target && typeof target.lat === "number" && typeof target.lng === "number") {
-            mapRef.current.panTo(
-                new window.naver.maps.LatLng(target.lat, target.lng)
-            );
+            // 디바운스 타이머
+            let timer = setTimeout(() => {
+                mapRef.current.panTo(
+                    new window.naver.maps.LatLng(target.lat, target.lng)
+                );
+            }, 100); // 0.25초 후에 실행
+
+            // cleanup: 이전 타이머 제거
+            return () => clearTimeout(timer);
         }
     }, [locationIndex, location, mapRef]);
 
