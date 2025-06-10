@@ -5,6 +5,7 @@ import Button from "../common/Button";
 import MiniButton from "./MiniButton";
 import pageState from "../../stores/pageState";
 import locationState from "../../stores/locationState";
+import SelectLocationButton from "./SelectLocationButton";
 import axios from "axios";
 
 function SuggestionSidebar() {
@@ -31,7 +32,8 @@ function SuggestionSidebar() {
                     (res.data.areas || []).map(area => ({
                         name: area.name,
                         lat: area.centroid.latitude,
-                        lng: area.centroid.longitude
+                        lng: area.centroid.longitude,
+                        score: area.score,
                     }))
                 );
             } catch (error) {
@@ -61,24 +63,11 @@ function SuggestionSidebar() {
         <div className="flex flex-col items-center justify-between h-full">
             {areas[locationIndex] ? <SubTitle content={areas[locationIndex].name} /> : <SubTitle content="추천 동네가 없습니다." />}
 
-            <div className="flex flex-col items-center">
-                <div className="flex gap-2">
-                    <button
-                        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                        onClick={() => setLocationIndex(locationIndex - 1)}
-                        disabled={locationIndex <= 0}
-                    >
-                        이전
-                    </button>
-                    <button
-                        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-                        onClick={() => setLocationIndex(locationIndex + 1)}
-                        disabled={locationIndex >= areas.length - 1}
-                    >
-                        다음
-                    </button>
-                </div>
-            </div>
+            <SelectLocationButton
+                areas={areas}
+                locationIndex={locationIndex}
+                setLocationIndex={setLocationIndex}
+            />
 
             <DescriptionBox recommendations={recommendations} />
 

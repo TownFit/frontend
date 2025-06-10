@@ -32,7 +32,7 @@ function MapView() {
                 map: mapRef.current
             });
             const infoWindow = new window.naver.maps.InfoWindow({
-                content: '<div style=text-align:center;padding:10px;"><b>“이 학교, 학점 말고 점수는요?”</b></div>'
+                content: '<div style=text-align:center;padding:10px;"><b>“내가 살기 가장 좋은 동네는 어디일까?”</b></div>'
             });
             infoWindow.open(mapRef.current, marker.getPosition());
         };
