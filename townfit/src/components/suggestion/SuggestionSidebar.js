@@ -6,7 +6,7 @@ import MiniButton from "./MiniButton";
 import pageState from "../../stores/pageState";
 import locationState from "../../stores/locationState";
 import SelectLocationButton from "./SelectLocationButton";
-import Score from "./Score";
+import InfoTown from "./\bInfoTown";
 import axios from "axios";
 
 function SuggestionSidebar() {
@@ -62,9 +62,12 @@ function SuggestionSidebar() {
 
     return (
         <div className="flex flex-col items-center justify-between h-full">
-            {areas[locationIndex] ? <SubTitle content={areas[locationIndex].name} /> : <SubTitle content="추천 동네가 없습니다." />}
+            {areas[locationIndex]
+                ? <SubTitle content={areas[locationIndex].name} />
+                : <SubTitle content="추천 동네가 없습니다." />}
 
-            <Score
+            <InfoTown
+                ranking={locationIndex + 1}
                 score={areas[locationIndex] ? areas[locationIndex].score : 0}
             />
 
