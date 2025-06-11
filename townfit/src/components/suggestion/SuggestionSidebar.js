@@ -54,9 +54,8 @@ function SuggestionSidebar() {
         const lat = areas[locationIndex].centroid.latitude;
         const lng = areas[locationIndex].centroid.longitude;
         const zoomLevel = 14;
-        const aValue = "IA01";
         window.open(
-            `https://isale.land.naver.com/iSale/Map/#?SYMap=${lat},${lng},${zoomLevel}&a=${aValue}`,
+            `https://new.land.naver.com/complexes?ms=${lat},${lng},${zoomLevel}&a=APT:PRE:ABYG:JGC&e=RETAIL`,
             "_blank"
         );
     };
