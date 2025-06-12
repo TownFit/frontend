@@ -53,7 +53,7 @@ function SuggestionSidebar() {
         if (!areas[locationIndex]) return;
         const lat = areas[locationIndex].centroid.latitude;
         const lng = areas[locationIndex].centroid.longitude;
-        const zoomLevel = 14;
+        const zoomLevel = 15;
         window.open(
             `https://new.land.naver.com/complexes?ms=${lat},${lng},${zoomLevel}&a=APT:PRE:ABYG:JGC&e=RETAIL`,
             "_blank"
